@@ -1,8 +1,8 @@
 cask "qgenie" do
-  version "0.0.0"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  version "0.0.3"
+  sha256 "32c9c3c7db195787300e410f018cc754266307161fa816a52320f7ebc8fe4074"
 
-  url "https://github.com/Queryus/QGenie_app/releases/download/v#{version}/QGenie-#{version}.dmg"
+  url "https://github.com/Queryus/QGenie_app/releases/download/v0.0.3/QGenie-0.0.1-arm64.dmg"
   name "QGenie"
   desc "QGenie Application"
   homepage "https://github.com/Queryus/QGenie_app"
