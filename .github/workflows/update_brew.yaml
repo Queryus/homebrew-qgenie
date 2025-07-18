@@ -8,6 +8,21 @@ jobs:
   update-tap:
     runs-on: ubuntu-latest
     steps:
+      # ==================================
+      #             시작 알림
+      # ==================================
+      - name: Send Start Notification
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+            "username": "Homebrew 봇",
+            "embeds": [{
+              "description": "**${{ github.event.client_payload.version }}** 버전으로 Homebrew Cask 업데이트를 시작합니다.",
+              "color": 2243312
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
       - name: Check out homebrew-qgenie
         uses: actions/checkout@v4
         with:
@@ -54,3 +69,33 @@ jobs:
 
           git commit -m "$COMMIT_SUBJECT" -m "$COMMIT_BODY"
           git push
+
+      # ==================================
+      #           최종 결과 알림
+      # ==================================
+      - name: Send Success Notification
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+            "username": "Homebrew 봇",
+            "embeds": [{
+              "description": "**${{ github.event.client_payload.version }}** 버전 Homebrew Cask 업데이트에 성공했습니다!",
+              "color": 5167473
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Send Failure Notification
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{
+            "username": "Homebrew 봇",
+            "embeds": [{
+              "description": "**${{ github.event.client_payload.version }}** 버전 Homebrew Cask 업데이트 중 오류가 발생했습니다.",
+              "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+              "color": 15219495
+            }]
+          }' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
